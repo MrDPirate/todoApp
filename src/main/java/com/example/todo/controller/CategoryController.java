@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/categories/")
 public class CategoryController {
     private CategoryService categoryService;
 
@@ -19,28 +19,37 @@ public class CategoryController {
     }
 
     //Create
-    @PostMapping("categories")
+    @PostMapping()
     public Category craeteCategory(@RequestBody Category category){
         System.out.println("Controller Calling createCategory ==>");
         return categoryService.createCategory(category);
     }
     //Read all
 
-    @GetMapping("categories")
+    @GetMapping()
     public List<Category> getCategory(){
         System.out.println("Controller Calling getCategory - all ==>");
         return categoryService.getCategory();
     }
 
     //Read One
-    @GetMapping("categories/{categoryId}")
+    @GetMapping("{categoryId}")
     public Optional<Category> getCategory(@PathVariable(value = "categoryId") Long id){
         System.out.println("Controller Calling getCategory - one ==>");
         return categoryService.getCategory(id);
     }
 
     //Update
-
+    @PutMapping("{categoryId}")
+    public Category updateCategory(@PathVariable(value = "categoryId") Long categoryId, @RequestBody Category categoryObject){
+        System.out.println("Calling updateCategory ==>");
+        return categoryService.updateCategory(categoryId,categoryObject);
+    }
 
     //Delete
+    @DeleteMapping(path = "{categoryId}")
+    public Optional<Category> deleteCategory(@PathVariable(value = "categoryId") Long id){
+        System.out.println("Controller Calling deleteCategory ==>");
+        return categoryService.deleteCategory(id);
+    }
 }

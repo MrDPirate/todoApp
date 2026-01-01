@@ -50,6 +50,43 @@ public class CategoryService {
     }
 
     //Update
+    public Category updateCategory(Long categoryId, Category categoryObject) {
+        System.out.println("service calling updateCategory ==>");
+
+        Category existingCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() ->
+                        new InformationNotFoundException(
+                                "category with id " + categoryId + " not found"
+                        )
+                );
+
+        //make sure category name is unique
+        if (categoryRepository.findByName(categoryObject.getName())!=null) {
+            throw new InformationExistException(
+                    "category " + categoryObject.getName() + " already exists"
+            );
+        }
+
+        if (categoryObject.getName() != null){
+            existingCategory.setName(categoryObject.getName());
+        }
+        if (categoryObject.getDescription() != null) {
+            existingCategory.setDescription(categoryObject.getDescription());
+        }
+        return categoryRepository.save(existingCategory);
+    }
 
     //Delete
+    public Optional<Category> deleteCategory(Long categoryId){
+
+        System.out.println("Service Calling deleteCategory ==>");
+        Optional<Category> category = categoryRepository.findById(categoryId);
+
+        if (category.isPresent()){
+            categoryRepository.deleteById(categoryId);
+            return category;
+        }else {
+            throw new InformationNotFoundException("Category with id "+categoryId+" not found");
+        }
+    }
 }
