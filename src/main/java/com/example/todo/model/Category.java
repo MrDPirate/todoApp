@@ -2,6 +2,11 @@ package com.example.todo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -21,4 +26,7 @@ public class Category {
 
     @Column
     private String description;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category", orphanRemoval = true)
+    private List<Item> recipeList;
 }
