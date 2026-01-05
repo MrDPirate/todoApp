@@ -31,7 +31,8 @@ public class ItemService {
     //Create
     public Item createItem(Long categoryId, Item itemObject) {
         System.out.println("Service Calling createItem ==>");
-        Category category = categoryRepository.findById(categoryId)
+        Category category = categoryRepository.findByIdAndUserId(categoryId
+                        ,CategoryService.getCurrentLoggedInUser().getId())
                 .orElseThrow(() ->
                         new InformationNotFoundException("Category with id " + categoryId + " not found"));
 
@@ -39,16 +40,22 @@ public class ItemService {
         return itemRepository.save(itemObject);
     }
 
-    //Get All
-    public List<Item> getAllItem(Long categoryId) {
+    //Get All In One Category
+    public List<Item> getAllCategoryItems(Long categoryId) {
         System.out.println("Service Calling getAllItem ==>");
-        return itemRepository.findByCategoryId(categoryId);
+        return itemRepository.findByCategoryIdAndUserId(categoryId,CategoryService.getCurrentLoggedInUser().getId());
+    }
+
+    public List<Item> getAllItem() {
+        System.out.println("Service Calling getAllItem ==>");
+        return itemRepository.findByUserId(CategoryService.getCurrentLoggedInUser().getId());
     }
 
     //Get one
     public Item getItem(Long categoryId,Long itemId) {
         System.out.println("Service Calling getItem ==>");
-        Item item = itemRepository.findByCategoryIdAndId(categoryId,itemId)
+        Item item = itemRepository.findByUserIdAndCategoryIdAndId(CategoryService.getCurrentLoggedInUser().getId()
+                        , categoryId,itemId)
                 .orElseThrow(() ->
                         new InformationNotFoundException(
                                 "item with id " + itemId +" and category id "+categoryId+ " not found"
@@ -62,7 +69,8 @@ public class ItemService {
     public Item updateItem(Long categoryId, Long itemId, Item itemObject) {
         System.out.println("Service Calling updateItem ==>");
 
-        Item existingItem = itemRepository.findByCategoryIdAndId(categoryId,itemId)
+        Item existingItem = itemRepository.findByUserIdAndCategoryIdAndId(CategoryService.getCurrentLoggedInUser().getId(),
+                categoryId,itemId)
                 .orElseThrow(() ->
                         new InformationNotFoundException(
                                 "item with id " + itemId +" and category id "+categoryId+ " not found"
@@ -89,7 +97,8 @@ public class ItemService {
     public Item deleteItem(Long categoryId,Long itemId) {
 
         System.out.println("Service Calling deleteItem ==>");
-        Item item = itemRepository.findByCategoryIdAndId(categoryId,itemId)
+        Item item = itemRepository.findByUserIdAndCategoryIdAndId(CategoryService.getCurrentLoggedInUser().getId()
+                        , categoryId,itemId)
                 .orElseThrow(() ->
                         new InformationNotFoundException(
                                 "item with id " + itemId +" and category id "+categoryId+ " not found"

@@ -27,10 +27,17 @@ public class ItemController {
 
     //Read All
     @GetMapping()
-    public List<Item> readAllItems(@PathVariable(value = "categoryId")Long categoryId){
+    public List<Item> getAllCategoryItems(@PathVariable(value = "categoryId")Long categoryId){
         System.out.println("Controller Calling readAllItems ==>");
-        return itemService.getAllItem(categoryId);
+        return itemService.getAllCategoryItems(categoryId);
     }
+
+    @GetMapping()
+    public List<Item> readAllItems(){
+        System.out.println("Controller Calling readAllItems ==>");
+        return itemService.getAllItem();
+    }
+
 
     //Read one
     @GetMapping(path = "/{itemId}")

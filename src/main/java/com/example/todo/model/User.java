@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "user")
 @Getter
@@ -38,5 +40,11 @@ public class User {
     public String getPassword(){
         return password;
     }
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<Item> itemList;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<Category> categoryList;
 
 }
